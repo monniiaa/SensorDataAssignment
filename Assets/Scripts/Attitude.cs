@@ -56,6 +56,11 @@ public class Attitude : MonoBehaviour
         } 
     }
 
+    /// <summary>
+    /// Converts data from The quaternion list into GyroScopeData
+    /// </summary>
+    /// <param name="list"> The list to be converted</param>
+    /// <param name="name"> The name of the file </param>
     public void UploadGyroValue(List<Quaternion> list, string name)
     {
         csvWriter.ConvertData(list);

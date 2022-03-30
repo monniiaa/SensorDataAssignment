@@ -15,6 +15,9 @@ public class ButtonBehavior: MonoBehaviour
         startButton.onClick.AddListener(OnButtonPress);
     }
 
+    /// <summary>
+    /// Runs when the button is pressed
+    /// </summary>
     public void OnButtonPress()
     {
         if (isPressed)
@@ -26,6 +29,11 @@ public class ButtonBehavior: MonoBehaviour
             isPressed = true;
         }
     }
+
+    /// <summary>
+    /// Set the text for the button
+    /// </summary>
+    /// <param name="text">The text for the button</param>
 
     public void SetButtonText(string text)
     {

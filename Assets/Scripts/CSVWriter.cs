@@ -25,6 +25,10 @@ public class CSVWriter : MonoBehaviour
 
     public GyroScopeDataList gyroList = new GyroScopeDataList();
 
+    /// <summary>
+    /// Converts a list of Quaternions to 
+    /// </summary>
+    /// <param name="list"> The list up for convertion</param>
     public void ConvertData(List<Quaternion> list)
     {
         gyroList.datapoint.Clear();
@@ -38,6 +42,11 @@ public class CSVWriter : MonoBehaviour
             gyroList.datapoint.Add(data);
         }
     }
+
+    /// <summary>
+    /// Writting the values from the gyrolist in a CSV file
+    /// </summary>
+    /// <param name="name">The name of the document</param>
     public void WriteCSV(string name)
     {
         filename = Application.persistentDataPath + "/" + name +".CSV";
