@@ -3,54 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class CSVWriter : MonoBehaviour
+public class CSVWriter 
 {
     string filename;
-    bool fileIsmade = false;
 
-    Attitude attitude;
-    [System.Serializable]
-    public class GyroScopeData
+    public CSVWriter()
     {
-        public float x;
-        public float y;
-        public float z;
-    }
-
-    [System.Serializable]
-    public class GyroScopeDataList
-    {
-        public List<GyroScopeData> datapoint = new List<GyroScopeData>();
-    }
-
-    public GyroScopeDataList gyroList = new GyroScopeDataList();
-
-    /// <summary>
-    /// Converts a list of Quaternions to 
-    /// </summary>
-    /// <param name="list"> The list up for convertion</param>
-    public void ConvertData(List<Quaternion> list)
-    {
-        gyroList.datapoint.Clear();
-        for (int i = 0; i< list.Count; i++)
-        {
-            GyroScopeData data = new GyroScopeData();
-            data.x = list[i].x;
-            data.y = list[i].y;
-            data.z = list[i].z;
-
-            gyroList.datapoint.Add(data);
-        }
+       
     }
 
     /// <summary>
     /// Writting the values from the gyrolist in a CSV file
     /// </summary>
     /// <param name="name">The name of the document</param>
-    public void WriteCSV(string name)
+    public void WriteCSV(string name, List<Quaternion> list)
     {
         filename = Application.persistentDataPath + "/" + name +".CSV";
-        if (gyroList.datapoint.Count > 0)
+        if (list.Count > 0)
         {
             TextWriter tw = new StreamWriter(filename, false);
             tw.WriteLine("x; y; z");
@@ -58,10 +27,10 @@ public class CSVWriter : MonoBehaviour
 
             tw = new StreamWriter(filename, true);
 
-            for (int i = 0; i<gyroList.datapoint.Count; i++)
+            for (int i = 0; i<list.Count; i++)
             {
-                tw.WriteLine(gyroList.datapoint[i].x + ";" + gyroList.datapoint[i].y + ";" +
-                                gyroList.datapoint[i].z);
+                tw.WriteLine(list[i].x + ";" + list[i].y + ";" +
+                                list[i].z);
             }
             tw.Close();
         }

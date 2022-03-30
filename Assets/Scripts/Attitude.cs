@@ -24,7 +24,7 @@ public class Attitude : MonoBehaviour
         GyroScopeReader.xTreshHold = 0.03f;
         GyroScopeReader.zTreshHold = 0.07f;
         InputSystem.EnableDevice(AttitudeSensor.current);
-        csvWriter = GetComponent<CSVWriter>();
+        csvWriter = new CSVWriter();
     }
 
     private void Update() {
@@ -45,7 +45,7 @@ public class Attitude : MonoBehaviour
         } if (button.isPressed && GyroScopeReader.IsFlat() && gyroDataList.Count > 0)
         {
             button.OnButtonPress();
-            UploadGyroValue(gyroDataList, "Gyrodata" + filenumber);
+            csvWriter.WriteCSV("Gyrosensordata" + filenumber, gyroDataList);
             filenumber++;
             gyroDataList.Clear();
         }
@@ -55,16 +55,4 @@ public class Attitude : MonoBehaviour
             gyroDataList.Clear();
         } 
     }
-
-    /// <summary>
-    /// Converts data from The quaternion list into GyroScopeData
-    /// </summary>
-    /// <param name="list"> The list to be converted</param>
-    /// <param name="name"> The name of the file </param>
-    public void UploadGyroValue(List<Quaternion> list, string name)
-    {
-        csvWriter.ConvertData(list);
-        csvWriter.WriteCSV(name);
-    }
-
 }
