@@ -11,6 +11,7 @@ public class Attitude : MonoBehaviour
     [SerializeField]
     ButtonBehavior button;
     CSVWriter csvWriter;
+    GyroScopeReader reader;
     public TextMeshProUGUI xText;
     public TextMeshProUGUI yText;
     public TextMeshProUGUI zText;
@@ -21,8 +22,7 @@ public class Attitude : MonoBehaviour
 
     private void Start()
     {
-        GyroScopeReader.xTreshHold = 0.03f;
-        GyroScopeReader.zTreshHold = 0.07f;
+        reader = new GyroScopeReader(0.03f, 0.07f);
         InputSystem.EnableDevice(AttitudeSensor.current);
         csvWriter = new CSVWriter();
     }
@@ -31,18 +31,18 @@ public class Attitude : MonoBehaviour
         
         if (SystemInfo.supportsGyroscope)
         {
-            xText.text = "x:" + GyroScopeReader.GyroAxisConvert(AttitudeSensor.current.attitude.ReadValue()).x.ToString(); 
-            yText.text = "y:" + GyroScopeReader.GyroAxisConvert(AttitudeSensor.current.attitude.ReadValue()).y.ToString();
-            zText.text = "z:" + GyroScopeReader.GyroAxisConvert(AttitudeSensor.current.attitude.ReadValue()).z.ToString();
-            wText.text = "w:" + GyroScopeReader.GyroAxisConvert(AttitudeSensor.current.attitude.ReadValue()).w.ToString();
+            xText.text = "x:" + reader.GyroAxisConvert(AttitudeSensor.current.attitude.ReadValue()).x.ToString(); 
+            yText.text = "y:" + reader.GyroAxisConvert(AttitudeSensor.current.attitude.ReadValue()).y.ToString();
+            zText.text = "z:" + reader.GyroAxisConvert(AttitudeSensor.current.attitude.ReadValue()).z.ToString();
+            wText.text = "w:" + reader.GyroAxisConvert(AttitudeSensor.current.attitude.ReadValue()).w.ToString();
         }
 
-        debugText.text = GyroScopeReader.IsFlat().ToString();
-        if (button.isPressed && !GyroScopeReader.IsFlat() && gyroDataList.Count < 700)
+        debugText.text = reader.IsFlat().ToString();
+        if (button.isPressed && !reader.IsFlat() && gyroDataList.Count < 700)
         {
-            GyroScopeReader.RecordGyroValues(gyroDataList);
+            reader.RecordGyroValues(gyroDataList);
             button.SetButtonText("Recording");
-        } if (button.isPressed && GyroScopeReader.IsFlat() && gyroDataList.Count > 0)
+        } if (button.isPressed && reader.IsFlat() && gyroDataList.Count > 0)
         {
             button.OnButtonPress();
             csvWriter.WriteCSV("Gyrosensordata" + filenumber, gyroDataList);
